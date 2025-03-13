@@ -1,18 +1,17 @@
-from pydantic import BaseModel
-from typing import List
+from sqlalchemy import Column, Integer, String
+from database import Base
 
-users_db = {}
+class User(Base):
+    __tablename__ = "users"
 
-class User(BaseModel):
-    username: str
-    password: str
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
+    password = Column(String)
 
-class UserResponse(BaseModel):
-    username: str
-    token: str
+class Order(Base):
+    __tablename__ = "orders"
 
-class Order(BaseModel):
-    order_id: int
-    user: str
-    service: str
-    status: str = "pending"
+    order_id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, index=True)
+    service = Column(String)
+    status = Column(String, default="pending", index=True)

@@ -1,4 +1,12 @@
 fastapi
 uvicorn
+sqlalchemy
+psycopg2-binary
 pydantic
-PyJWT
+bcrypt
+python-dotenv
+pyjwt
+pymongo
+motor
+redis
+aioredis

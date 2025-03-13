@@ -1,7 +1,17 @@
-from models import User, Order
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-users_db = {
-    "admin": User(username="admin", password="secret")
-}
+DATABASE_URL = "postgresql://postgres:password@db:5432/mydatabase"
 
-orders_db = []
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+# Функция для получения сессии базы данных
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
