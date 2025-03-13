@@ -6,7 +6,7 @@ class UserCreate(BaseModel):
     password: str
 
 class OrderResponse(BaseModel):
-    order_id: int
+    order_id: str
     service: str
     status: str
 

@@ -47,7 +47,10 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
 
     # Получаем заказы пользователя
     orders = db.query(Order).filter(Order.user_id == db_user.id).all()
-    order_list = [OrderResponse(order_id=o.order_id, service=o.service, status=o.status) for o in orders]
+    order_list = [
+        OrderResponse(order_id=str(o.order_id), service=o.service, status=o.status)
+        for o in orders
+    ]
 
     return {
         "user_id": db_user.id,
