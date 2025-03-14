@@ -32,7 +32,15 @@ services:
       - mongo_data:/data/db
     ports:
       - "27017:27017"
+  
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
 
 volumes:
   postgres_data:
   mongo_data:
+  redis_data:
