@@ -7,6 +7,7 @@ from database import get_db
 import bcrypt
 import jwt
 import datetime
+from mongodb import get_orders_by_user 
 
 SECRET_KEY = "supersecretkey"
 ALGORITHM = "HS256"
@@ -45,12 +46,8 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
     
     token = create_jwt(db_user.username)
 
-    # Получаем заказы пользователя
-    orders = db.query(Order).filter(Order.user_id == db_user.id).all()
-    order_list = [
-        OrderResponse(order_id=str(o.order_id), service=o.service, status=o.status)
-        for o in orders
-    ]
+    # Получаем заказы пользователя из MongoDB
+    order_list = get_orders_by_user(db_user.id)
 
     return {
         "user_id": db_user.id,
