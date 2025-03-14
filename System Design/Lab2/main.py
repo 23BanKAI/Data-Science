@@ -10,6 +10,7 @@ from database import get_db
 import bcrypt
 import jwt
 import datetime
+from redis_client import redis_client
 
 # Создание всех таблиц в базе данных
 Base.metadata.create_all(bind=engine)
@@ -28,3 +29,12 @@ app.include_router(auth_router, prefix="/auth", tags=["Авторизация"])
 @app.get("/")
 def root():
     return {"message": "Система заказа услуг работает!"}
+
+@app.get("/redis-test")
+def test_redis():
+    try:
+        redis_client.set("test_key", "Hello, Redis!")
+        value = redis_client.get("test_key")
+        return {"message": value}
+    except Exception as e:
+        return {"error": str(e)}
