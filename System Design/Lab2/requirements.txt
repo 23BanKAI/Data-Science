@@ -10,3 +10,4 @@ pymongo
 motor
 redis
 aioredis
+confluent-kafka
