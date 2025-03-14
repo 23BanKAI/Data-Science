@@ -10,9 +10,14 @@ services:
     depends_on:
       - db
       - mongo
+      - redis
+      - kafka
     environment:
       - DATABASE_URL=postgresql://postgres:password@db:5432/mydatabase
       - MONGO_URL=mongodb://mongo:27017/mydatabase
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - KAFKA_BROKER=kafka:9092
     command: ["sh", "-c", "python /app/create_db.py && uvicorn main:app --host 0.0.0.0 --port 8000"]
 
   db:
@@ -34,6 +39,30 @@ services:
       - mongo_data:/data/db
     ports:
       - "27017:27017"
+
+  redis:
+    image: redis:latest
+    container_name: redis-cache
+    restart: always
+    ports:
+      - "6379:6379"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
 
 volumes:
   postgres_data:
