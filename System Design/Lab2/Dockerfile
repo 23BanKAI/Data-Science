@@ -7,7 +7,5 @@ RUN apt-get update && \
 # Установка зависимостей Python
 WORKDIR /app
 COPY . /app
+COPY entrypoint.sh /app/entrypoint.sh
 RUN pip install -r requirements.txt
-
-# Установка entrypoint
-ENTRYPOINT ["./entrypoint.sh"]
